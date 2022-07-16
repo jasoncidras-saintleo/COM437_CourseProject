@@ -1,5 +1,5 @@
 # My Inventory app
-Saint Leo Unversity Course Project - COM-437
+Saint Leo University Course Project - COM-437
 
 # Background
 Inventory management can be a daunting task for anyone. Keeping track of what food you have in your pantry or cleaning supplies can be exhausting. It is tough to remember what items you need to put on a shopping list.
