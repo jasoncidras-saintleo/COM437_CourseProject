@@ -14,6 +14,9 @@
     <string name="filter_household">Household</string>
 
     <!-- dialog strings -->
+    <string name="dialog_add_item_title">Add an Item</string>
+    <string name="dialog_add_label">Item Name</string>
+    <string name="dialog_category_label">Category</string>
     <string name="dialog_add">Add</string>
     <string name="dialog_cancel">Cancel</string>
 </resources>
