@@ -2,6 +2,7 @@ package edu.saintleo.com437.inventorymanager.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +14,10 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import edu.saintleo.com437.inventorymanager.R;
+import edu.saintleo.com437.inventorymanager.dao.AppDatabase;
+import edu.saintleo.com437.inventorymanager.dao.ItemDao;
+import edu.saintleo.com437.inventorymanager.dao.entities.Item;
 
 public class AddItemDialog extends DialogFragment {
     View dialogView;
@@ -23,8 +25,19 @@ public class AddItemDialog extends DialogFragment {
     String selectedItem;
     String[] items;
 
+    AppDatabase db;
+    ItemDao dao;
+    int categoryId;
+
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        // get the context
+        Context context = requireActivity().getApplicationContext();
+        // get database
+        db = AppDatabase.getInstance(context);
+        // get dao
+        dao = db.itemDao();
         // fetch the layout inflater
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         // inflate the dialog view
@@ -42,6 +55,7 @@ public class AddItemDialog extends DialogFragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedItem = items[i];
+                categoryId = i;
             }
 
             @Override
@@ -56,11 +70,10 @@ public class AddItemDialog extends DialogFragment {
                 .setTitle(R.string.dialog_add_item_title)
                 .setPositiveButton(R.string.dialog_add, (dialogInterface, i) -> {
                     EditText txtItemName = dialogView.findViewById(R.id.txt_item_name);
-                    String message = String.format("Item Name: %s, Item Category: %s", txtItemName.getText(), selectedItem);
-                    Snackbar.make(
-                            requireActivity().findViewById(R.id.nav_host_fragment_content_main),
-                            message,
-                            Snackbar.LENGTH_SHORT).show();
+                    Item item = new Item();
+                    item.name = txtItemName.getText().toString();
+                    item.categoryId = categoryId;
+                    dao.insert(item);
                 })
                 .setNegativeButton(R.string.dialog_cancel, (dialogInterface, i) -> {
 

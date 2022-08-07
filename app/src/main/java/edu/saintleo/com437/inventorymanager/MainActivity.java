@@ -1,24 +1,24 @@
 package edu.saintleo.com437.inventorymanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import edu.saintleo.com437.inventorymanager.databinding.ActivityMainBinding;
 import edu.saintleo.com437.inventorymanager.dialog.AddItemDialog;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration appBarConfiguration;
+    private Button btnFilterCold, btnFilterPantry, btnFilterHousehold,
+        btnViewInventory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,16 +27,24 @@ public class MainActivity extends AppCompatActivity {
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSupportActionBar(binding.toolbar);
+        setSupportActionBar(binding.toolbar1);
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-        binding.fab.setOnClickListener(view -> {
+        binding.fab1.setOnClickListener(view -> {
             DialogFragment addItemDialogFragment = new AddItemDialog();
             addItemDialogFragment.show(getSupportFragmentManager(), "Add Item");
         });
+        // grab all buttons
+        this.btnFilterCold = findViewById(R.id.btn_filter_cold);
+        this.btnFilterCold.setOnClickListener(this::filterOnCold);
+
+        this.btnFilterPantry = findViewById(R.id.btn_filter_pantry);
+        this.btnFilterPantry.setOnClickListener(this::filterOnPantry);
+
+        this.btnFilterHousehold = findViewById(R.id.btn_filter_household);
+        this.btnFilterHousehold.setOnClickListener(this::filterOnHouseHold);
+
+        this.btnViewInventory = findViewById(R.id.btn_view_inventory);
+        this.btnViewInventory.setOnClickListener(this::viewInventory);
     }
 
     @Override
@@ -61,10 +69,29 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
+    /*
+     * Navigation to Inventory View
+     */
+    private void filterOnCold(View view) {
+        Intent intent = new Intent(this, InventoryActivity.class);
+        intent.putExtra("categoryId", 0);
+        startActivity(intent);
+    }
+
+    private void filterOnPantry(View view) {
+        Intent intent = new Intent(this, InventoryActivity.class);
+        intent.putExtra("categoryId", 1);
+        startActivity(intent);
+    }
+
+    private void filterOnHouseHold(View view) {
+        Intent intent = new Intent(this, InventoryActivity.class);
+        intent.putExtra("categoryId", 3);
+        startActivity(intent);
+    }
+
+    private void viewInventory(View view) {
+        Intent intent = new Intent(this, InventoryActivity.class);
+        startActivity(intent);
     }
 }
