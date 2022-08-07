@@ -29,3 +29,27 @@ Backend: Java
   * While shopping, check off an item by clicking the checkbox next to the item
   * When all items are checked, asks the user to delete the list or uncheck all items (to re-use the list)
 * All data will be stored on the device
+
+# Change Log
+* July 10, 2022 - Version 1 - Initial Commit
+* July 16, 2022 - Version 1 - First commit: added main activity, filter, inventory fragment, and add item dialog fragment
+* July 20, 2022 - Version 1 - Checked in prototype/mockups
+* July 31, 2022 - Version 1 - Updated main activity to reflect mockups. Updated add item dialog to include a category
+* Aug 7, 2022 - Version 1 - Removed navigation fragments. Updated Inventory to be an activity. Now using room database.
+
+# Upcoming changes
+* Features
+  * Shopping Lists
+    * Add Shopping List activity
+    * Add ability to mark item as 'done'
+  * Navigation
+    * Add bottom navigation to switch between inventory and shopping lists
+  * Inventory
+    * Add ability to add item to a shopping list
+    * Add ability to view all items when a filter is applied
+    * Add ability to filter when viewing all items
+* Bugs
+  * Start page
+    * Clicking on a filter button doesn't actually filter on the inventory list
+    * Adding a new item doesn't update the inventory list
+
