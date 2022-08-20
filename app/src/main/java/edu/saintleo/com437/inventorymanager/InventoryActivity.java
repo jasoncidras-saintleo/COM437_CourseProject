@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -37,9 +38,8 @@ public class InventoryActivity extends AppCompatActivity implements DialogInterf
         setSupportActionBar(binding.toolbar2);
         // binding for adding an item
         binding.fab2.setOnClickListener(view -> {
-            final String ADD_ITEM_TAG = "AddItemDialog";
             DialogFragment addItemDialogFragment = new AddItemDialog();
-            addItemDialogFragment.show(getSupportFragmentManager(), ADD_ITEM_TAG);
+            addItemDialogFragment.show(getSupportFragmentManager(), AddItemDialog.TAG);
             // add positive button clicks here as we need to refresh the list
         });
         // get selected category ID from intent
@@ -68,7 +68,7 @@ public class InventoryActivity extends AppCompatActivity implements DialogInterf
             ? this.dao.getAll(this.selectedCategoryId)
             : this.dao.getAll();
         // initialize adapter
-        ItemAdapter itemAdapter = new ItemAdapter(items, this.context);
+        ItemAdapter itemAdapter = new ItemAdapter(items, this.context, this);
         this.recyclerView.setAdapter(itemAdapter);
     }
 
@@ -79,12 +79,12 @@ public class InventoryActivity extends AppCompatActivity implements DialogInterf
                 ? this.dao.getAll(this.selectedCategoryId)
                 : this.dao.getAll();
         // initialize adapter
-        ItemAdapter itemAdapter = new ItemAdapter(items, this.context);
+        ItemAdapter itemAdapter = new ItemAdapter(items, this.context, this);
         this.recyclerView.setAdapter(itemAdapter);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;

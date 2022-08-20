@@ -19,4 +19,8 @@
     <string name="dialog_category_label">Category</string>
     <string name="dialog_add">Add</string>
     <string name="dialog_cancel">Cancel</string>
+
+    <string name="dialog_remove_item_title">Remove Item?</string>
+    <string name="dialog_remove_item_text">Do you wish to remove this item from your inventory?</string>
+    <string name="dialog_remove">Remove</string>
 </resources>

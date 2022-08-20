@@ -3,6 +3,7 @@ package edu.saintleo.com437.inventorymanager;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.fragment.app.DialogFragment;
@@ -17,8 +18,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btnFilterCold, btnFilterPantry, btnFilterHousehold,
-        btnViewInventory;
+    private final String CATEGORY_ID = "categoryId";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,24 +31,24 @@ public class MainActivity extends AppCompatActivity {
 
         binding.fab1.setOnClickListener(view -> {
             DialogFragment addItemDialogFragment = new AddItemDialog();
-            addItemDialogFragment.show(getSupportFragmentManager(), "Add Item");
+            addItemDialogFragment.show(getSupportFragmentManager(), AddItemDialog.TAG);
         });
         // grab all buttons
-        this.btnFilterCold = findViewById(R.id.btn_filter_cold);
-        this.btnFilterCold.setOnClickListener(this::filterOnCold);
+        Button btnFilterCold = findViewById(R.id.btn_filter_cold);
+        btnFilterCold.setOnClickListener(this::filterOnCold);
 
-        this.btnFilterPantry = findViewById(R.id.btn_filter_pantry);
-        this.btnFilterPantry.setOnClickListener(this::filterOnPantry);
+        Button btnFilterPantry = findViewById(R.id.btn_filter_pantry);
+        btnFilterPantry.setOnClickListener(this::filterOnPantry);
 
-        this.btnFilterHousehold = findViewById(R.id.btn_filter_household);
-        this.btnFilterHousehold.setOnClickListener(this::filterOnHouseHold);
+        Button btnFilterHousehold = findViewById(R.id.btn_filter_household);
+        btnFilterHousehold.setOnClickListener(this::filterOnHouseHold);
 
-        this.btnViewInventory = findViewById(R.id.btn_view_inventory);
-        this.btnViewInventory.setOnClickListener(this::viewInventory);
+        Button btnViewInventory = findViewById(R.id.btn_view_inventory);
+        btnViewInventory.setOnClickListener(this::viewInventory);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -74,19 +74,19 @@ public class MainActivity extends AppCompatActivity {
      */
     private void filterOnCold(View view) {
         Intent intent = new Intent(this, InventoryActivity.class);
-        intent.putExtra("categoryId", 0);
+        intent.putExtra(this.CATEGORY_ID, 0);
         startActivity(intent);
     }
 
     private void filterOnPantry(View view) {
         Intent intent = new Intent(this, InventoryActivity.class);
-        intent.putExtra("categoryId", 1);
+        intent.putExtra(this.CATEGORY_ID, 1);
         startActivity(intent);
     }
 
     private void filterOnHouseHold(View view) {
         Intent intent = new Intent(this, InventoryActivity.class);
-        intent.putExtra("categoryId", 2);
+        intent.putExtra(this.CATEGORY_ID, 2);
         startActivity(intent);
     }
 

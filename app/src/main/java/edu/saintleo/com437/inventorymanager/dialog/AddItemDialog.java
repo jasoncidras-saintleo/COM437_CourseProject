@@ -9,16 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-import edu.saintleo.com437.inventorymanager.InventoryActivity;
 import edu.saintleo.com437.inventorymanager.R;
 import edu.saintleo.com437.inventorymanager.dao.AppDatabase;
 import edu.saintleo.com437.inventorymanager.dao.ItemDao;
@@ -33,6 +31,8 @@ public class AddItemDialog extends DialogFragment {
     AppDatabase db;
     ItemDao dao;
     int categoryId;
+
+    public static final String TAG = "AddItem";
 
     @NonNull
     @Override
@@ -73,21 +73,35 @@ public class AddItemDialog extends DialogFragment {
         // build the view
         builder.setView(dialogView)
                 .setTitle(R.string.dialog_add_item_title)
-                .setPositiveButton(R.string.dialog_add, (dialogInterface, i) -> {
-                    EditText txtItemName = dialogView.findViewById(R.id.txt_item_name);
-                    Item item = new Item();
-                    item.name = txtItemName.getText().toString();
-                    item.categoryId = categoryId;
-                    dao.insert(item);
-                })
-                .setNegativeButton(R.string.dialog_cancel, (dialogInterface, i) -> {
+                .setPositiveButton(R.string.dialog_add, null)
+                .setNegativeButton(R.string.dialog_cancel, (dialogInterface, i) -> { });
+        AlertDialog dialog = builder.create();
 
-                });
-        return builder.create();
+        dialog.setOnShowListener(dialogInterface -> {
+            Button okButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            okButton.setOnClickListener(view -> {
+                EditText txtItemName = dialogView.findViewById(R.id.txt_item_name);
+                final String itemName = txtItemName.getText().toString().trim();
+                // verify that item name is NOT empty
+                if (itemName.isEmpty()) {
+                    txtItemName.setError("Item Name is required");
+                    txtItemName.requestFocus();
+                    return;
+                }
+                Item item = new Item();
+                item.name = itemName;
+                item.categoryId = categoryId;
+                dao.insert(item);
+                // close the dialog
+                dialog.dismiss();
+            });
+        });
+
+        return dialog;
     }
 
     @Override
-    public void onDismiss(final DialogInterface dialog) {
+    public void onDismiss(@NonNull final DialogInterface dialog) {
         super.onDismiss(dialog);
         FragmentActivity activity = getActivity();
         if (activity instanceof DialogInterface.OnDismissListener) {
