@@ -3,6 +3,7 @@ package edu.saintleo.com437.inventorymanager.dialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +13,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
+import edu.saintleo.com437.inventorymanager.InventoryActivity;
 import edu.saintleo.com437.inventorymanager.R;
 import edu.saintleo.com437.inventorymanager.dao.AppDatabase;
 import edu.saintleo.com437.inventorymanager.dao.ItemDao;
@@ -79,5 +84,14 @@ public class AddItemDialog extends DialogFragment {
 
                 });
         return builder.create();
+    }
+
+    @Override
+    public void onDismiss(final DialogInterface dialog) {
+        super.onDismiss(dialog);
+        FragmentActivity activity = getActivity();
+        if (activity instanceof DialogInterface.OnDismissListener) {
+            ((DialogInterface.OnDismissListener) activity).onDismiss(dialog);
+        }
     }
 }

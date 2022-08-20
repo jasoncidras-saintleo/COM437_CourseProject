@@ -16,6 +16,9 @@ public interface ItemDao {
     @Query("SELECT * FROM item")
     List<Item> getAll();
 
+    @Query("SELECT * FROM item WHERE categoryId = :categoryId")
+    List<Item> getAll(int categoryId);
+
     @Query("SELECT * FROM item WHERE id = :id LIMIT 1")
     Item getItem(int id);
 

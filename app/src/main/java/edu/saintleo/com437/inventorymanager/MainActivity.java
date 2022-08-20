@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void filterOnHouseHold(View view) {
         Intent intent = new Intent(this, InventoryActivity.class);
-        intent.putExtra("categoryId", 3);
+        intent.putExtra("categoryId", 2);
         startActivity(intent);
     }
 

@@ -1,6 +1,7 @@
 package edu.saintleo.com437.inventorymanager;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,10 +21,11 @@ import edu.saintleo.com437.inventorymanager.dao.entities.Item;
 import edu.saintleo.com437.inventorymanager.databinding.ActivityInventoryBinding;
 import edu.saintleo.com437.inventorymanager.dialog.AddItemDialog;
 
-public class InventoryActivity extends AppCompatActivity {
+public class InventoryActivity extends AppCompatActivity implements DialogInterface.OnDismissListener{
     private RecyclerView recyclerView;
     private ItemDao dao;
     private Context context;
+    private Integer selectedCategoryId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,11 +37,15 @@ public class InventoryActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbar2);
         // binding for adding an item
         binding.fab2.setOnClickListener(view -> {
+            final String ADD_ITEM_TAG = "AddItemDialog";
             DialogFragment addItemDialogFragment = new AddItemDialog();
-            addItemDialogFragment.show(getSupportFragmentManager(), "Add Item");
+            addItemDialogFragment.show(getSupportFragmentManager(), ADD_ITEM_TAG);
             // add positive button clicks here as we need to refresh the list
-
         });
+        // get selected category ID from intent
+        this.selectedCategoryId = getIntent().getIntExtra("categoryId", -1);
+        // if the category is -1, that's the default and set the selected category to null
+        this.selectedCategoryId = this.selectedCategoryId == -1 ? null : this.selectedCategoryId;
         // get the context
         this.context = getApplicationContext();
         // get recycler view
@@ -50,7 +56,6 @@ public class InventoryActivity extends AppCompatActivity {
         this.dao = db.itemDao();
         // init recycler
         initRecycler();
-
     }
 
     private void initRecycler() {
@@ -59,7 +64,20 @@ public class InventoryActivity extends AppCompatActivity {
                 new DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL);
         this.recyclerView.addItemDecoration(dividerItemDecoration);
         // get list of items
-        List<Item> items = this.dao.getAll();
+        List<Item> items = this.selectedCategoryId != null
+            ? this.dao.getAll(this.selectedCategoryId)
+            : this.dao.getAll();
+        // initialize adapter
+        ItemAdapter itemAdapter = new ItemAdapter(items, this.context);
+        this.recyclerView.setAdapter(itemAdapter);
+    }
+
+    @Override
+    public void onDismiss(final DialogInterface dialog) {
+        // get list of items
+        List<Item> items = this.selectedCategoryId != null
+                ? this.dao.getAll(this.selectedCategoryId)
+                : this.dao.getAll();
         // initialize adapter
         ItemAdapter itemAdapter = new ItemAdapter(items, this.context);
         this.recyclerView.setAdapter(itemAdapter);
