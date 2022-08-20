@@ -36,20 +36,21 @@ Backend: Java
 * July 20, 2022 - Version 1 - Checked in prototype/mockups
 * July 31, 2022 - Version 1 - Updated main activity to reflect mockups. Updated add item dialog to include a category
 * Aug 7, 2022 - Version 1 - Removed navigation fragments. Updated Inventory to be an activity. Now using room database.
+* Aug 19, 2022 - Version 1 - Fixed bug where clicking on filter button didn't filter inventory. Fixed bug where adding an item didn't add to inventory. Added remove item dialog.
 
 # Upcoming changes
 * Features
   * Shopping Lists
-    * Add Shopping List activity
-    * Add ability to mark item as 'done'
+    * [ ] Add Shopping List activity
+    * [ ] Add ability to mark item as 'done'
   * Navigation
-    * Add bottom navigation to switch between inventory and shopping lists
+    * [ ] Add bottom navigation to switch between inventory and shopping lists
   * Inventory
-    * Add ability to add item to a shopping list
-    * Add ability to view all items when a filter is applied
-    * Add ability to filter when viewing all items
+    * [ ] Add ability to add item to a shopping list
+    * [ ] Add ability to view all items when a filter is applied
+    * [ ] Add ability to filter when viewing all items
 * Bugs
   * Start page
-    * Clicking on a filter button doesn't actually filter on the inventory list
-    * Adding a new item doesn't update the inventory list
+    * ~~Clicking on a filter button doesn't actually filter on the inventory list~~
+    * ~~Adding a new item doesn't update the inventory list~~
 
