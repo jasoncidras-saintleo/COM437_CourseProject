@@ -8,50 +8,50 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
 import edu.saintleo.com437.inventorymanager.R;
 import edu.saintleo.com437.inventorymanager.dao.AppDatabase;
-import edu.saintleo.com437.inventorymanager.dao.ItemDao;
-import edu.saintleo.com437.inventorymanager.dao.entities.Item;
+import edu.saintleo.com437.inventorymanager.dao.ShoppingListDao;
+import edu.saintleo.com437.inventorymanager.dao.entities.ShoppingList;
+import io.reactivex.rxjava3.annotations.NonNull;
 
-public class RemoveItemDialog extends DialogFragment {
+public class RemoveShoppingListDialog extends DialogFragment {
 
     View dialogView;
     AppDatabase db;
-    ItemDao dao;
+    ShoppingListDao dao;
 
-    Item itemToDelete;
+    ShoppingList shoppingListToDelete;
 
-    public static final String TAG = "RemoveItem";
-    public static final String SERIALIZABLE_TAG = "remove-item";
+    public static final String TAG = "RemoveShoppingList";
+    public static final String SERIALIZABLE_TAG = "shopping-list";
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // get item from bundle
+        // get shopping list from bundle
         if (getArguments() == null) {
             return super.onCreateDialog(savedInstanceState);
         }
-        this.itemToDelete = (Item)getArguments().getSerializable(SERIALIZABLE_TAG);
+        this.shoppingListToDelete = (ShoppingList) getArguments().getSerializable(SERIALIZABLE_TAG);
         // get the context
         Context context = requireActivity().getApplicationContext();
-        // get database
+        // get the database
         db = AppDatabase.getInstance(context);
         // get dao
-        dao = db.itemDao();
+        dao = db.shoppingListDao();
         // fetch the layout inflater
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         // inflate the dialog view
-        dialogView = inflater.inflate(R.layout.dialog_remove_item, null);
+        dialogView = inflater.inflate(R.layout.dialog_remove_shopping_list, null);
         // create builder
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // build the view
         builder.setView(dialogView)
-                .setTitle(R.string.dialog_remove_item_title)
-                .setPositiveButton(R.string.dialog_remove, (dialogInterface, i) -> dao.delete(this.itemToDelete))
+                .setTitle(R.string.dialog_remove_shopping_list_title)
+                .setPositiveButton(R.string.dialog_remove, (dialogInterface, i) -> dao.delete(this.shoppingListToDelete))
                 .setNegativeButton(R.string.dialog_cancel, (dialogInterface, i) -> {});
         return builder.create();
     }

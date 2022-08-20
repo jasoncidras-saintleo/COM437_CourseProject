@@ -17,7 +17,7 @@ public interface ShoppingListDao {
     List<ShoppingList> getAll();
 
     @Insert
-    void insert(ShoppingList entity);
+    long insert(ShoppingList entity);
 
     @Update
     void update(ShoppingList entity);
