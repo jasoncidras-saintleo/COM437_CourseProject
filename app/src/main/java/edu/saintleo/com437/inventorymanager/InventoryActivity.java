@@ -2,6 +2,7 @@ package edu.saintleo.com437.inventorymanager;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +14,9 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
+
 import java.util.List;
 
 import edu.saintleo.com437.inventorymanager.dao.AppDatabase;
@@ -22,7 +26,7 @@ import edu.saintleo.com437.inventorymanager.dao.entities.Item;
 import edu.saintleo.com437.inventorymanager.databinding.ActivityInventoryBinding;
 import edu.saintleo.com437.inventorymanager.dialog.AddItemDialog;
 
-public class InventoryActivity extends AppCompatActivity implements DialogInterface.OnDismissListener{
+public class InventoryActivity extends AppCompatActivity implements DialogInterface.OnDismissListener, NavigationBarView.OnItemSelectedListener {
     private RecyclerView recyclerView;
     private ItemDao dao;
     private Context context;
@@ -42,6 +46,10 @@ public class InventoryActivity extends AppCompatActivity implements DialogInterf
             addItemDialogFragment.show(getSupportFragmentManager(), AddItemDialog.TAG);
             // add positive button clicks here as we need to refresh the list
         });
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_bar_inventory);
+        bottomNavigationView.setOnItemSelectedListener(this);
+        bottomNavigationView.setSelected(true);
+        bottomNavigationView.setSelectedItemId(R.id.menu_inventory_list);
         // get selected category ID from intent
         this.selectedCategoryId = getIntent().getIntExtra("categoryId", -1);
         // if the category is -1, that's the default and set the selected category to null
@@ -70,6 +78,19 @@ public class InventoryActivity extends AppCompatActivity implements DialogInterf
         // initialize adapter
         ItemAdapter itemAdapter = new ItemAdapter(items, this.context, this);
         this.recyclerView.setAdapter(itemAdapter);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_home:
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
+            case R.id.menu_shopping_list:
+                startActivity(new Intent(this, ShoppingListActivity.class));
+                return true;
+        }
+        return false;
     }
 
     @Override

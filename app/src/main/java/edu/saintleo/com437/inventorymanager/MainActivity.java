@@ -16,7 +16,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
+
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
 
     private final String CATEGORY_ID = "categoryId";
 
@@ -28,6 +31,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar1);
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_bar_main);
+        bottomNavigationView.setOnItemSelectedListener(this);
+        bottomNavigationView.setSelectedItemId(R.id.menu_home);
 
         binding.fab1.setOnClickListener(view -> {
             DialogFragment addItemDialogFragment = new AddItemDialog();
@@ -45,6 +52,19 @@ public class MainActivity extends AppCompatActivity {
 
         Button btnViewInventory = findViewById(R.id.btn_view_inventory);
         btnViewInventory.setOnClickListener(this::viewInventory);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_inventory_list:
+                startActivity(new Intent(this, InventoryActivity.class));
+                return true;
+            case R.id.menu_shopping_list:
+                startActivity(new Intent(this, ShoppingListActivity.class));
+                return true;
+        }
+        return false;
     }
 
     @Override

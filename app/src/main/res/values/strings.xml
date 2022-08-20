@@ -5,6 +5,7 @@
     <string name="to_inventory">View Inventory</string>
     <string name="inventory_view_name">Inventory</string>
     <string name="filter_view_name">Inventory</string>
+    <string name="shopping_list_view_name">Shopping Lists</string>
 
     <string name="instructions">Select a Filter or Continue to Inventory</string>
 
@@ -23,4 +24,8 @@
     <string name="dialog_remove_item_title">Remove Item?</string>
     <string name="dialog_remove_item_text">Do you wish to remove this item from your inventory?</string>
     <string name="dialog_remove">Remove</string>
+
+    <!-- bottom navigation -->
+    <string name="bot_nav_inventory_name">Inventory</string>
+    <string name="bot_nav_shopping_lists_name">Shopping Lists</string>
 </resources>
