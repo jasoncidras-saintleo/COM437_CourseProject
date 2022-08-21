@@ -18,80 +18,89 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.List;
 
+import edu.saintleo.com437.inventorymanager.constants.Strings;
 import edu.saintleo.com437.inventorymanager.dao.AppDatabase;
 import edu.saintleo.com437.inventorymanager.dao.ShoppingListDao;
+import edu.saintleo.com437.inventorymanager.dao.ShoppingListItemDao;
 import edu.saintleo.com437.inventorymanager.dao.adapters.HeaderAdapter;
-import edu.saintleo.com437.inventorymanager.dao.adapters.ShoppingListAdapter;
+import edu.saintleo.com437.inventorymanager.dao.adapters.ShoppingListItemAdapter;
 import edu.saintleo.com437.inventorymanager.dao.entities.ShoppingList;
-import edu.saintleo.com437.inventorymanager.databinding.ActivityShoppinglistsBinding;
+import edu.saintleo.com437.inventorymanager.dao.entities.ShoppingListItem;
+import edu.saintleo.com437.inventorymanager.databinding.ActivityShoppinglistItemsBinding;
 
-public class ShoppingListActivity extends AppCompatActivity implements DialogInterface.OnDismissListener, NavigationBarView.OnItemSelectedListener {
+public class ShoppingListItemActivity extends AppCompatActivity implements DialogInterface.OnDismissListener, NavigationBarView.OnItemSelectedListener {
 
     private Context context;
     private RecyclerView recyclerView;
-    private ShoppingListAdapter adapter;
+    private AppDatabase db;
+    private ShoppingListItemDao dao;
+    private ShoppingList shoppingList;
     private HeaderAdapter headerAdapter;
-    private ShoppingListDao dao;
+    private ShoppingListItemAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ActivityShoppinglistsBinding binding = ActivityShoppinglistsBinding.inflate(getLayoutInflater());
+        ActivityShoppinglistItemsBinding binding =
+                ActivityShoppinglistItemsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_bar_shopping);
+        int shoppingListId = getIntent().getIntExtra(Strings.SHOPPING_LIST_ID, -1);
+        // if the shopping list is -1, then no valid shopping list was passed
+        // finish activity to return back to shopping lists
+        if (shoppingListId == -1) {
+            finish();
+        }
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_bar_shopping_items);
         bottomNavigationView.setOnItemSelectedListener(this);
-        bottomNavigationView.setSelectedItemId(R.id.menu_shopping_list);
 
         this.context = getApplicationContext();
         // get recycler view
-        this.recyclerView = findViewById(R.id.shopping_list_recycler);
+        this.recyclerView = findViewById(R.id.shopping_list_item_recycler);
         // get db instance
-        AppDatabase db = AppDatabase.getInstance(this.context);
+        db = AppDatabase.getInstance(this.context);
         // assign the dao
-        this.dao = db.shoppingListDao();
-        this.initHeaderAdapter();
-        this.initItemAdapter();
+        this.dao = db.shoppingListItemDao();
+        // init shopping list from db
+        initShoppingList(shoppingListId);
+        // init header adapter
+        initHeaderAdapter();
         // init recycler
         initRecycler();
     }
 
-    /**
-     * Initializes the header to be seen above the recycler
-     */
+    private void initShoppingList(int shoppingListId) {
+        ShoppingListDao shoppingListDao = db.shoppingListDao();
+        // get the shopping list form db
+        this.shoppingList = shoppingListDao.get(shoppingListId);
+    }
+
     private void initHeaderAdapter() {
-        this.headerAdapter = new HeaderAdapter("Your Shopping Lists");
+        // init header adapter
+        this.headerAdapter = new HeaderAdapter(shoppingList.name);
     }
 
-    /**
-     * Initializes the items to be seen in the recycler
-     */
     private void initItemAdapter() {
-        // get list of items
-        List<ShoppingList> shoppingLists = this.dao.getAll();
+        // get lists of shopping lists
+        List<ShoppingListItem> shoppingLists = this.dao.getAll(this.shoppingList.id);
         // initialize adapter
-        this.adapter = new ShoppingListAdapter(shoppingLists, this.context, this);
+        this.adapter = new ShoppingListItemAdapter(shoppingLists, this.context, this, this.dao);
     }
 
-    /**
-     * Initializes the recycler
-     */
     private void initRecycler() {
         this.recyclerView.setLayoutManager(new LinearLayoutManager(this.context));
         DividerItemDecoration dividerItemDecoration =
                 new DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL);
         this.recyclerView.addItemDecoration(dividerItemDecoration);
+        this.initItemAdapter();
         this.setRecycler();
     }
 
-    /**
-     * Sets the recycler with items
-     */
     private void setRecycler() {
-        ConcatAdapter concatAdapter = new ConcatAdapter(
-            this.headerAdapter,
-            this.adapter
-        );
+        ConcatAdapter concatAdapter = new ConcatAdapter(this.headerAdapter, this.adapter);
+        // concat header and adapter
         this.recyclerView.setAdapter(concatAdapter);
     }
 
@@ -104,15 +113,17 @@ public class ShoppingListActivity extends AppCompatActivity implements DialogInt
             case R.id.menu_inventory_list:
                 startActivity(new Intent(this, InventoryActivity.class));
                 return true;
+            case R.id.menu_shopping_list:
+                startActivity(new Intent(this, ShoppingListActivity.class));
+                return true;
         }
         return false;
     }
 
     @Override
     public void onDismiss(@NonNull final DialogInterface dialog) {
-        // re-fetch from the database
+        // set the recycler to adapter
         this.initItemAdapter();
-        // set the recycler view
         this.setRecycler();
     }
 }

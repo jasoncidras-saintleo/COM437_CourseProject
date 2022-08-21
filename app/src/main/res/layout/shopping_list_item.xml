@@ -2,21 +2,25 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="5">
     <TextView
         android:id="@+id/tv_shopping_list_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_gravity="start"
-        android:layout_weight="1"/>
+        android:layout_marginStart="10dp"
+        android:layout_gravity="start|center_vertical"
+        android:layout_weight="4"/>
     <ImageButton
         android:id="@+id/btn_delete_shopping_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_menu_delete"
-        android:layout_gravity="end"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:src="@drawable/ic_delete_24dp"
+        android:background="@color/red"
+        android:layout_gravity="end|center"
         android:padding="10dp"
         android:contentDescription="delete shopping list"
         />

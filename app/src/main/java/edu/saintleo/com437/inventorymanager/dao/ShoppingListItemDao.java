@@ -13,7 +13,9 @@ import edu.saintleo.com437.inventorymanager.dao.entities.ShoppingListItem;
 @Dao
 public interface ShoppingListItemDao {
 
-    @Query("SELECT * FROM shoppingListItem WHERE shoppingListId = :shoppingListId")
+    @Query("SELECT a.id, a.shoppingListId, a.itemId, a.isDone, b.name as 'itemName' FROM shoppingListItem AS a " +
+            "INNER JOIN item AS b ON a.itemId = b.id " +
+            "WHERE a.shoppingListId = :shoppingListId")
     List<ShoppingListItem> getAll(int shoppingListId);
 
     @Insert

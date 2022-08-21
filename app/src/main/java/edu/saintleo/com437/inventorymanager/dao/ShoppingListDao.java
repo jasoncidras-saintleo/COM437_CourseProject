@@ -16,6 +16,9 @@ public interface ShoppingListDao {
     @Query("SELECT * FROM shoppingList")
     List<ShoppingList> getAll();
 
+    @Query("SELECT * FROM shoppinglist WHERE id = :id LIMIT 1")
+    ShoppingList get(int id);
+
     @Insert
     long insert(ShoppingList entity);
 

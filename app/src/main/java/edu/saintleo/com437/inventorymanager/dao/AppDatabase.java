@@ -10,7 +10,7 @@ import edu.saintleo.com437.inventorymanager.dao.entities.Item;
 import edu.saintleo.com437.inventorymanager.dao.entities.ShoppingList;
 import edu.saintleo.com437.inventorymanager.dao.entities.ShoppingListItem;
 
-@Database(entities = {Item.class, ShoppingList.class, ShoppingListItem.class}, version = 2)
+@Database(entities = {Item.class, ShoppingList.class, ShoppingListItem.class}, version = 3)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static final String DB_NAME = "inventory-db";

@@ -5,17 +5,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ShoppingListActivity"
-    >
-
-     <androidx.recyclerview.widget.RecyclerView
-         android:id="@+id/shopping_list_recycler"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
+    tools:context=".ShoppingListItemActivity">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/shopping_list_item_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_nav_bar_shopping"
+        android:id="@+id/bottom_nav_bar_shopping_items"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"

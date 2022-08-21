@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,8 +20,10 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.List;
 
+import edu.saintleo.com437.inventorymanager.constants.Strings;
 import edu.saintleo.com437.inventorymanager.dao.AppDatabase;
 import edu.saintleo.com437.inventorymanager.dao.ItemDao;
+import edu.saintleo.com437.inventorymanager.dao.adapters.HeaderAdapter;
 import edu.saintleo.com437.inventorymanager.dao.adapters.ItemAdapter;
 import edu.saintleo.com437.inventorymanager.dao.entities.Item;
 import edu.saintleo.com437.inventorymanager.databinding.ActivityInventoryBinding;
@@ -31,6 +34,7 @@ public class InventoryActivity extends AppCompatActivity implements DialogInterf
     private ItemDao dao;
     private Context context;
     private Integer selectedCategoryId;
+    private ItemAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,8 +42,6 @@ public class InventoryActivity extends AppCompatActivity implements DialogInterf
         //TODO: Extract bindings to fragment to be shared across activities
         ActivityInventoryBinding binding = ActivityInventoryBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        setSupportActionBar(binding.toolbar2);
         // binding for adding an item
         binding.fab2.setOnClickListener(view -> {
             DialogFragment addItemDialogFragment = new AddItemDialog();
@@ -51,7 +53,7 @@ public class InventoryActivity extends AppCompatActivity implements DialogInterf
         bottomNavigationView.setSelected(true);
         bottomNavigationView.setSelectedItemId(R.id.menu_inventory_list);
         // get selected category ID from intent
-        this.selectedCategoryId = getIntent().getIntExtra("categoryId", -1);
+        this.selectedCategoryId = getIntent().getIntExtra(Strings.CATEGORY_ID, -1);
         // if the category is -1, that's the default and set the selected category to null
         this.selectedCategoryId = this.selectedCategoryId == -1 ? null : this.selectedCategoryId;
         // get the context
@@ -66,18 +68,30 @@ public class InventoryActivity extends AppCompatActivity implements DialogInterf
         initRecycler();
     }
 
+    private void initItemAdapter() {
+        // get list of items
+        List<Item> items = this.selectedCategoryId != null
+                ? this.dao.getAll(this.selectedCategoryId)
+                : this.dao.getAll();
+        // initialize adapter
+        this.adapter = new ItemAdapter(items, this.context, this);
+    }
+
     private void initRecycler() {
         this.recyclerView.setLayoutManager(new LinearLayoutManager(this.context));
         DividerItemDecoration dividerItemDecoration =
                 new DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL);
         this.recyclerView.addItemDecoration(dividerItemDecoration);
-        // get list of items
-        List<Item> items = this.selectedCategoryId != null
-            ? this.dao.getAll(this.selectedCategoryId)
-            : this.dao.getAll();
-        // initialize adapter
-        ItemAdapter itemAdapter = new ItemAdapter(items, this.context, this);
-        this.recyclerView.setAdapter(itemAdapter);
+        this.initItemAdapter();
+        this.setRecycler();
+    }
+
+    private void setRecycler() {
+        ConcatAdapter concatAdapter = new ConcatAdapter(
+          new HeaderAdapter("Your Inventory"),
+          this.adapter
+        );
+        this.recyclerView.setAdapter(concatAdapter);
     }
 
     @Override
@@ -95,13 +109,8 @@ public class InventoryActivity extends AppCompatActivity implements DialogInterf
 
     @Override
     public void onDismiss(final DialogInterface dialog) {
-        // get list of items
-        List<Item> items = this.selectedCategoryId != null
-                ? this.dao.getAll(this.selectedCategoryId)
-                : this.dao.getAll();
-        // initialize adapter
-        ItemAdapter itemAdapter = new ItemAdapter(items, this.context, this);
-        this.recyclerView.setAdapter(itemAdapter);
+        this.initItemAdapter();
+        this.setRecycler();
     }
 
     @Override

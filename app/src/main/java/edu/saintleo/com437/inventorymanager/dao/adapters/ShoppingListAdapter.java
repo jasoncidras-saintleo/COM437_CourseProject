@@ -1,6 +1,7 @@
 package edu.saintleo.com437.inventorymanager.dao.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -16,10 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import edu.saintleo.com437.inventorymanager.R;
+import edu.saintleo.com437.inventorymanager.ShoppingListItemActivity;
+import edu.saintleo.com437.inventorymanager.constants.Strings;
 import edu.saintleo.com437.inventorymanager.dao.entities.ShoppingList;
-import edu.saintleo.com437.inventorymanager.dialog.RemoveItemDialog;
 import edu.saintleo.com437.inventorymanager.dialog.RemoveShoppingListDialog;
-import io.reactivex.rxjava3.annotations.NonNull;
 
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ShoppingListViewHolder> {
 
@@ -46,24 +48,33 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     @Override
     public void onBindViewHolder(ShoppingListViewHolder holder, int position) {
-        holder.txtShoppingListName.setText(this.shoppingLists.get(position).name);
+        ShoppingList shoppingList = this.shoppingLists.get(position);
+        // sets the name of the shopping list
+        holder.txtShoppingListName.setText(shoppingList.name);
+        // deletes a shopping list
         holder.btnDeleteShoppingList.setOnClickListener(view -> {
-            ShoppingList shoppingListToDelete = this.shoppingLists.get(position);
             // set shopping list to bundle
             Bundle bundle = new Bundle();
-            bundle.putSerializable(RemoveShoppingListDialog.SERIALIZABLE_TAG, shoppingListToDelete);
+            bundle.putSerializable(RemoveShoppingListDialog.SERIALIZABLE_TAG, shoppingList);
             RemoveShoppingListDialog dialog = new RemoveShoppingListDialog();
             dialog.setArguments(bundle);
             // get transaction
             FragmentTransaction ft = this.activity.getSupportFragmentManager().beginTransaction();
             // if there was a previous dialog, find it and remove it
-            Fragment prev = this.activity.getSupportFragmentManager().findFragmentByTag(RemoveItemDialog.TAG);
+            Fragment prev = this.activity.getSupportFragmentManager().findFragmentByTag(RemoveShoppingListDialog.TAG);
             if (prev != null) {
                 ft.remove(prev);
             }
             ft.addToBackStack(null);
             // show dialog
             dialog.show(ft, RemoveShoppingListDialog.TAG);
+        });
+        // navigate to the shopping items
+        holder.itemView.setOnClickListener(view -> {
+            // create a new intent and bundle the
+            Intent intent = new Intent(this.context, ShoppingListItemActivity.class);
+            intent.putExtra(Strings.SHOPPING_LIST_ID, shoppingList.id);
+            this.activity.startActivity(intent);
         });
     }
 

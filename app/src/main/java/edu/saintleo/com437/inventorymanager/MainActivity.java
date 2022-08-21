@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.fragment.app.DialogFragment;
 
+import edu.saintleo.com437.inventorymanager.constants.Strings;
 import edu.saintleo.com437.inventorymanager.databinding.ActivityMainBinding;
 import edu.saintleo.com437.inventorymanager.dialog.AddItemDialog;
 
@@ -21,16 +22,12 @@ import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
 
-    private final String CATEGORY_ID = "categoryId";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        setSupportActionBar(binding.toolbar1);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_bar_main);
         bottomNavigationView.setOnItemSelectedListener(this);
@@ -94,19 +91,19 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
      */
     private void filterOnCold(View view) {
         Intent intent = new Intent(this, InventoryActivity.class);
-        intent.putExtra(this.CATEGORY_ID, 0);
+        intent.putExtra(Strings.CATEGORY_ID, 0);
         startActivity(intent);
     }
 
     private void filterOnPantry(View view) {
         Intent intent = new Intent(this, InventoryActivity.class);
-        intent.putExtra(this.CATEGORY_ID, 1);
+        intent.putExtra(Strings.CATEGORY_ID, 1);
         startActivity(intent);
     }
 
     private void filterOnHouseHold(View view) {
         Intent intent = new Intent(this, InventoryActivity.class);
-        intent.putExtra(this.CATEGORY_ID, 2);
+        intent.putExtra(Strings.CATEGORY_ID, 2);
         startActivity(intent);
     }
 

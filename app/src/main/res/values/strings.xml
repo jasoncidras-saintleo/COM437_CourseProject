@@ -15,21 +15,26 @@
     <string name="filter_household">Household</string>
 
     <!-- dialog strings -->
+    <!-- add item strings -->
     <string name="dialog_add_item_title">Add an Item</string>
     <string name="dialog_add_label">Item Name</string>
     <string name="dialog_category_label">Category</string>
-    <string name="dialog_add">Add</string>
-    <string name="dialog_cancel">Cancel</string>
-
+    <!-- add to shopping list strings -->
     <string name="dialog_add_item_to_list_title">Add to Shopping List</string>
     <string name="dialog_shopping_list_label">Shopping List</string>
     <string name="dialog_new_shopping_list_name">Shopping List Name</string>
-
+    <!-- remove item strings -->
     <string name="dialog_remove_item_title">Remove Item?</string>
     <string name="dialog_remove_item_text">Do you wish to remove this item from your inventory?</string>
-
+    <!-- remove shopping list strings -->
     <string name="dialog_remove_shopping_list_title">Remove Shopping List?</string>
     <string name="dialog_remove_shopping_list_text">Do you wish to remove this shopping list?</string>
+    <!-- remove shopping list item strings -->
+    <string name="dialog_remove_shopping_list_item_title">Remove Shopping List Item?</string>
+    <string name="dialog_remove_shopping_list_item_text">Do you wish to remove this item from the shopping list?</string>
+    <!-- common dialog strings -->
+    <string name="dialog_add">Add</string>
+    <string name="dialog_cancel">Cancel</string>
     <string name="dialog_remove">Remove</string>
 
     <!-- bottom navigation -->
