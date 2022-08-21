@@ -22,6 +22,7 @@ Backend: Java
     * Assigning a name to item
 * Viewing an Inventory
   * Filter by category or name
+  * Add a new Item
 * Creating a new Shopping List
   * On the Inventory View, click on "Add to List" on the item
     * Select a Shopping List to add the item to or create a new one
@@ -38,12 +39,14 @@ Backend: Java
 * Aug 7, 2022 - Version 1 - Removed navigation fragments. Updated Inventory to be an activity. Now using room database.
 * Aug 19, 2022 - Version 1 - Fixed bug where clicking on filter button didn't filter inventory. Fixed bug where adding an item didn't add to inventory. Added remove item dialog.
 * Aug 20, 2022 - Version 1 - Added Shopping List activity. Added Remove Shopping List dialog and Add item to list dialog. Added bottom navigation to switch between activities.
+* Aug 21, 2022 - Version 1 - Added Shopping Items activity. Added Remove Item form Shopping List dialog. Added new icons for adding/removing.
 
 # Upcoming changes
 * Features
   * Shopping Lists
     * [x] Add Shopping List activity
-    * [ ] Add ability to mark item as 'done'
+    * [x] Add ability to mark item as 'done'
+    * [x] Add ability to remove an item from a list
   * Navigation
     * [x] Add bottom navigation to switch between inventory and shopping lists
   * Inventory
