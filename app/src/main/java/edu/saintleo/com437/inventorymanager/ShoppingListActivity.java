@@ -60,7 +60,7 @@ public class ShoppingListActivity extends AppCompatActivity implements DialogInt
      * Initializes the header to be seen above the recycler
      */
     private void initHeaderAdapter() {
-        this.headerAdapter = new HeaderAdapter("Your Shopping Lists");
+        this.headerAdapter = new HeaderAdapter("Your Shopping Lists", this.context, false, null);
     }
 
     /**

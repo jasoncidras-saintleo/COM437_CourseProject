@@ -51,8 +51,8 @@ Backend: Java
     * [x] Add bottom navigation to switch between inventory and shopping lists
   * Inventory
     * [x] Add ability to add item to a shopping list
-    * [ ] Add ability to view all items when a filter is applied
-    * [ ] Add ability to filter when viewing all items
+    * [x] Add ability to view all items when a filter is applied
+    * [x] Add ability to filter when viewing all items
 * Bugs
   * Start page
     * ~~Clicking on a filter button doesn't actually filter on the inventory list~~

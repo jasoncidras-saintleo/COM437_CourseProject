@@ -79,7 +79,7 @@ public class ShoppingListItemActivity extends AppCompatActivity implements Dialo
 
     private void initHeaderAdapter() {
         // init header adapter
-        this.headerAdapter = new HeaderAdapter(shoppingList.name);
+        this.headerAdapter = new HeaderAdapter(shoppingList.name, this.context, false, null);
     }
 
     private void initItemAdapter() {

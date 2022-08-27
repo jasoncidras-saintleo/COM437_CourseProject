@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,12 +31,16 @@ import edu.saintleo.com437.inventorymanager.dao.entities.Item;
 import edu.saintleo.com437.inventorymanager.databinding.ActivityInventoryBinding;
 import edu.saintleo.com437.inventorymanager.dialog.AddItemDialog;
 
-public class InventoryActivity extends AppCompatActivity implements DialogInterface.OnDismissListener, NavigationBarView.OnItemSelectedListener {
+public class InventoryActivity extends AppCompatActivity implements
+        DialogInterface.OnDismissListener,
+        NavigationBarView.OnItemSelectedListener,
+        AdapterView.OnItemSelectedListener {
     private RecyclerView recyclerView;
     private ItemDao dao;
     private Context context;
     private Integer selectedCategoryId;
     private ItemAdapter adapter;
+    private HeaderAdapter headerAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,10 +70,34 @@ public class InventoryActivity extends AppCompatActivity implements DialogInterf
         AppDatabase db = AppDatabase.getInstance(this.context);
         // assign the dao
         this.dao = db.itemDao();
+        // init header adapter
+        initHeaderAdapter();
         // init recycler
         initRecycler();
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        // if position is 0, then it's the placeholder
+        if (pos == 0) {
+            return;
+        }
+        //check to see if the user selected 1 (view all)
+        // if user selected any other filter, then take the position - 2 to
+        // correspond to the appropriate category id.
+        pos = pos == 1 ? -1 : pos - 2;
+        selectedCategoryId = pos == -1 ? null : pos;
+        initItemAdapter();
+        initRecycler();
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    private void initHeaderAdapter() {
+        this.headerAdapter = new HeaderAdapter("Your Inventory", this.context, true, this);
+    }
     private void initItemAdapter() {
         // get list of items
         List<Item> items = this.selectedCategoryId != null
@@ -88,7 +118,7 @@ public class InventoryActivity extends AppCompatActivity implements DialogInterf
 
     private void setRecycler() {
         ConcatAdapter concatAdapter = new ConcatAdapter(
-          new HeaderAdapter("Your Inventory"),
+          this.headerAdapter,
           this.adapter
         );
         this.recyclerView.setAdapter(concatAdapter);
